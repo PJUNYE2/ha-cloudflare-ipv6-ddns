@@ -1,0 +1,70 @@
+{
+  "title": "Cloudflare IPv6 DDNS",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Cloudflare IPv6 动态域名",
+        "description": "只需填写 Token 和完整域名。Token 需要目标域名的「区域 → 区域 → 读取」及「区域 → DNS → 编辑」权限，Zone ID 和 IPv6 网卡自动识别。保存后开始同步，并将目标 AAAA 记录（包括已有记录）设为灰云直连。没有可用的本机公网 IPv6 时保留原解析，稍后自动重试。",
+        "data": {
+          "api_token": "Cloudflare API Token",
+          "record_name": "完整域名，例如 ha.example.com"
+        }
+      },
+      "reauth_confirm": {
+        "title": "更新 Cloudflare 授权",
+        "description": "请填写新的 Token，包含目标域名的区域读取和 DNS 编辑权限。",
+        "data": {
+          "api_token": "Cloudflare API Token"
+        }
+      },
+      "reconfigure": {
+        "title": "更换 Cloudflare Token",
+        "description": "为当前域名更换 Token。如需管理其他域名，请再次添加此集成。",
+        "data": {
+          "api_token": "Cloudflare API Token"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Token 无效或缺少区域读取 / DNS 编辑权限。",
+      "zone_not_found": "找不到对应的 Cloudflare 区域，请检查域名和 Token 授权范围。",
+      "record_conflict": "存在同名 CNAME 或多条 AAAA，请使用专用子域名或先处理冲突记录。",
+      "cannot_connect": "暂时无法连接 Cloudflare，请稍后再试。",
+      "invalid_hostname": "请输入完整域名，不要包含协议、端口、路径或通配符。",
+      "api_error": "Cloudflare 拒绝了请求，请检查区域和 DNS 配置。"
+    },
+    "abort": {
+      "already_configured": "这个域名已经配置过了。",
+      "reauth_successful": "授权已更新。",
+      "reconfigure_successful": "Token 已更新。"
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "DDNS 设置",
+        "description": "网卡留空自动识别；手动指定时填写 HAOS 虚拟机的网卡名（例如 enp0s18），不是 PVE 的 vmbr0。直连 HA 的 8123 端口请使用灰云；橙云需要使用 Cloudflare 支持的端口并配置相应 TLS。",
+        "data": {
+          "interface": "HAOS 网卡（可选，留空自动）",
+          "interval": "检查间隔（分钟）",
+          "proxied": "启用 Cloudflare 橙云代理"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "ipv6_address": {
+        "name": "IPv6 地址"
+      },
+      "last_sync": {
+        "name": "最近成功同步"
+      }
+    },
+    "button": {
+      "sync_now": {
+        "name": "立即同步"
+      }
+    }
+  }
+}

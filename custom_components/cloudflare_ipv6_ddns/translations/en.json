@@ -1,0 +1,70 @@
+{
+  "title": "Cloudflare IPv6 DDNS",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Cloudflare IPv6 DDNS",
+        "description": "Enter your token and full hostname. The token needs Zone → Zone → Read and Zone → DNS → Edit for your domain. Zone ID and IPv6 interface are detected automatically. Saving starts DDNS and sets the AAAA record to DNS only (gray cloud), including existing records. No usable local IPv6: wait and retry without changing DNS.",
+        "data": {
+          "api_token": "Cloudflare API token",
+          "record_name": "Hostname (ha.example.com)"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Renew Cloudflare token",
+        "description": "Provide a replacement token with Zone Read and DNS Edit permissions.",
+        "data": {
+          "api_token": "Cloudflare API token"
+        }
+      },
+      "reconfigure": {
+        "title": "Replace Cloudflare token",
+        "description": "Replace the token for this hostname. To manage another hostname, add another integration entry.",
+        "data": {
+          "api_token": "Cloudflare API token"
+        }
+      }
+    },
+    "error": {
+      "invalid_auth": "Invalid token or missing Zone Read / DNS Edit permissions.",
+      "zone_not_found": "No matching Cloudflare zone. Check hostname and token resource scope.",
+      "record_conflict": "This name has a CNAME or multiple AAAA records. Use a dedicated hostname.",
+      "cannot_connect": "Cannot connect to Cloudflare. Try again later.",
+      "invalid_hostname": "Enter a full hostname without a URL, port or wildcard.",
+      "api_error": "Cloudflare rejected the request. Check zone and DNS settings."
+    },
+    "abort": {
+      "already_configured": "This hostname is already configured.",
+      "reauth_successful": "Authentication updated.",
+      "reconfigure_successful": "Token updated."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "DDNS options",
+        "description": "Empty interface = automatic. Use the HAOS VM interface (e.g. enp0s18), not the PVE bridge. Gray cloud is recommended for direct HA :8123 access. Orange cloud requires a Cloudflare-supported port and compatible TLS configuration.",
+        "data": {
+          "interface": "HAOS network interface (optional)",
+          "interval": "Check interval (minutes)",
+          "proxied": "Enable Cloudflare proxy (orange cloud)"
+        }
+      }
+    }
+  },
+  "entity": {
+    "sensor": {
+      "ipv6_address": {
+        "name": "IPv6 address"
+      },
+      "last_sync": {
+        "name": "Last successful sync"
+      }
+    },
+    "button": {
+      "sync_now": {
+        "name": "Sync now"
+      }
+    }
+  }
+}
